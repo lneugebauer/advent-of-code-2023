@@ -21,19 +21,15 @@ func isNumber(r rune) bool {
 	return false
 }
 
-func analyzeString(s string) string {
+func process(s string) string {
 	var first string
 	var last string
 
 	for _, r := range s {
-		if first == "" && isNumber(r) {
-			first = string(r)
-		}
-	}
-
-	for i := len(s) - 1; i >= 0; i-- {
-		r := rune(s[i])
-		if last == "" && isNumber(r) {
+		if isNumber(r) {
+			if first == "" {
+				first = string(r)
+			}
 			last = string(r)
 		}
 	}
@@ -49,13 +45,13 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	var sum int
 	for scanner.Scan() {
-		s := analyzeString(scanner.Text())
+		s := process(scanner.Text())
 		v, err := strconv.Atoi(s)
 		check(err)
 		sum += v
 	}
-	fmt.Print(sum)
-
 	err = scanner.Err()
 	check(err)
+
+	fmt.Print(sum)
 }
